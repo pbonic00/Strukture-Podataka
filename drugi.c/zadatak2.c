@@ -210,7 +210,7 @@ Position FindBySurname(Position first, char* surname) {
         temp = temp -> next;
 	}
 
-	return temp;
+	return NULL;
 }
 
 
@@ -236,9 +236,9 @@ int DeleteAfter(Position head, char* surname){
             temp1 -> next = temp2 -> next;
             free (temp2);
         }
+        printf("Osoba s prezimenom %s je uspjesno izbrisana.\n", surname);
     }
     else printf("Osoba s prezimenom %s nije pronadena.\n", surname);
-    printf("Osoba s prezimenom %s je uspjesno izbrisana.\n", surname);
 
     return EXIT_SUCCESS;
 }
