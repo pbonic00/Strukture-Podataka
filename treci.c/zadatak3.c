@@ -24,12 +24,8 @@ Position FindBySurname(Position first, char* surname);
 Position FindBefore(Position first, Position position);                    
 int DeleteAfter(Position head, char* surname); 
 /*3. zadatak
-koristeni -InsertAfter 
-          -
-          iz prethodnog zadataka
-*/
+InsertAfter koristen iz prethodnog zadatka*/
 int InsertBefore(Position who, Position where, Position first);
-Position FindElement(Position first, char* surname);
 int SortWhileInserting(Position head, Position newPerson);
 int InsertInFile(Position head, char* nazivDat);
 int InsertFromFile(Position head, char* nazivDat);
