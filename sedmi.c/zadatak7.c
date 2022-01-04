@@ -23,7 +23,7 @@ TPosition Create(char *name);
 TPosition Insert(TPosition current, TPosition newEl);
 int Print(TPosition current);
 TPosition Pop(SPosition head, TPosition current);
-int Push(SPosition root, TPosition newSElement);
+int Push(SPosition root, SPosition newSElement);
 SPosition CreateStackEl(TPosition current);
 TPosition Find(TPosition current, char *name);
 
@@ -45,7 +45,7 @@ int main(){
 
     while(sl == 'y'){
 
-        printf("\nIzbornik:\n1-md \n2-cd dir \n3-cd (move to parent directory) \n4-dir \nUnesite svoj izbor:   ");
+        printf("\nIzbornik:\n1-md \n2-cd dir \n3-cd \n4-dir \nUnesite svoj izbor:   ");
         scanf("%d", &i);
             
             switch(i){
@@ -71,11 +71,12 @@ int main(){
 
                     if(tempp == NULL)
                         printf("Element %s ne postoji u direktoriju.", name);
-                    else Push(sroot, tempp);
+                    else{
+                        SPosition newSEl = CreateStackEl(current);
+                        Push(sroot, newSEl);
+                    }
 
                     current = tempp;
-                    printf("Elementi direktorija %s su: ", name);
-                    Print(current);
 
                     break;
                 }
@@ -155,28 +156,20 @@ TPosition Create(char *name){
 }
 
 
-TPosition Insert(TPosition current, TPosition newEl){
+TPosition Insert(TPosition current, TPosition newElement){
 
-    if(!current)    return newEl;
+   if (!current)
+		return newElement;
 
-    if( strcmp(current -> name, newEl -> name) > 0 ){
+	if (strcmp(current->name, newElement->name) < 0)
+		current->sibiling = Insert(current->sibiling, newElement);
 
-        newEl -> sibiling = current;
-        return newEl;
-    }
-
-    else if( strcmp(current -> name, newEl -> name) > 0 ){
-
-        newEl -> sibiling = Insert(current -> sibiling, newEl);
-    }
-
-    else if( strcmp(current -> name, newEl -> name) == 0 ){
-
-        printf("\nDirektorij s tim imeom vec postoji. ");
-        free(newEl);
-    }
-
-    return current;
+	else if (strcmp(current->name, newElement->name) > 0)
+	{
+		newElement->sibiling = current;
+		return newElement;
+	}
+	return current;
 }
 
 
@@ -195,6 +188,8 @@ int Print(TPosition current){
 }
 
 
+
+
 SPosition CreateStackEl(TPosition current){
     SPosition newEl = NULL;
     newEl = (SPosition) malloc (sizeof(stack));
@@ -211,34 +206,30 @@ SPosition CreateStackEl(TPosition current){
 }
 
 
-int Push(SPosition root, TPosition newSElement){
+int Push(SPosition root, SPosition newSElement){
 
-    SPosition newElement = CreateStackEl(newSElement);
+    newSElement -> next = root -> next;
+    root -> next = newSElement;
 
-    if(!newElement) return -1;
-
-    newElement -> next = root -> next;
-    root -> next = newElement;
-
-    return 1;
+    return EXIT_SUCCESS;
 }
 
 TPosition Pop(SPosition head, TPosition current){
 
-    SPosition parent = NULL;
-    parent = head -> next;
+    SPosition first = NULL;
+    first = head -> next;
 
     TPosition pom = NULL;
 
-    if(!parent){
+    if(!first){
         printf("This directory doesn't have a parent.");
         return current;
     }
 
-    pom = parent -> directory;
+    pom = first -> directory;
 
-    head -> next = parent -> next;
-    free(parent);
+    head -> next = first -> next;
+    free(first);
 
     return pom;
 
