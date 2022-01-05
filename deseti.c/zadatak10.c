@@ -104,7 +104,9 @@ int SortListWhileInserting(LPosition head, LPosition newElement){
     while( temp != NULL && strcmp(temp -> drzava, newElement -> drzava) > 0 ){ //ne triba next isprid temp!!
         temp = temp -> next;
     }
+
     InsertAfter(newElement, head);
+    return EXIT_SUCCESS;
 }
 
 int InsertAfter(LPosition who, LPosition where){
