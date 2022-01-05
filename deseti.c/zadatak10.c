@@ -45,22 +45,26 @@ int main(){
 
 
 int InsertInListFromFile(LPosition head, char *fileName){
+
     FILE* dat = NULL;
     dat = fopen(fileName, "r");
     char drzava[MAX_LINE] = {0}, buffer = {0}, datotekaGradova[MAX_LINE];
-    //TPosition root = NULL;
+    
     list tempp = {.drzava = "", .gradovi = NULL, .next = NULL};
     LPosition temp = &tempp;
-
+ 
     if(!dat){
         printf("Greska pri alociranju.\n");
         return -1;
     }
 
     while(!feof(dat)){
+
             fscanf(dat, "%s %s\n", drzava, datotekaGradova);
             temp = CreateListElement(drzava);
+
             InsertInTreeFromFile(temp, datotekaGradova);
+
             SortListWhileInserting(head, temp);
     }
 
@@ -92,16 +96,15 @@ int InsertInTreeFromFile(LPosition drzava,char *fileName){
 
 }
 
-int SortListWhileInserting(LPosition head, LPosition newPerson){
+int SortListWhileInserting(LPosition head, LPosition newElement){
 
     LPosition temp = NULL;
     temp = head -> next;
 
-    while( strcmp(newPerson -> gradovi, temp -> next -> gradovi) > 0 ){
+    while( temp != NULL && strcmp(temp -> drzava, newElement -> drzava) > 0 ){ //ne triba next isprid temp!!
         temp = temp -> next;
     }
-
-    InsertAfter(newPerson, temp);
+    InsertAfter(newElement, head);
 }
 
 int InsertAfter(LPosition who, LPosition where){
@@ -129,7 +132,7 @@ LPosition CreateListElement(char *drzava){
 }
 
 int PrintList(LPosition first){
-    LPosition temp = first;
+    LPosition temp = first -> next;
 
     while(temp){
         printf("Drzava: %s\n ", temp -> drzava);
@@ -145,7 +148,7 @@ int PrintTreeInOrder(TPosition current){
         return 0;
 
     PrintTreeInOrder(current -> left);
-    printf("\t%s sa %d stanovnika", current -> grad, current -> br_stan);
+    printf("\t\t%s sa %d stanovnika\n", current -> grad, current -> br_stan);
     PrintTreeInOrder(current -> right);
 
     return 0;
