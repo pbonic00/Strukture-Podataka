@@ -62,7 +62,6 @@ int InsertInListFromFile(LPosition head, char *fileName){
 
             fscanf(dat, "%s %s\n", drzava, datotekaGradova);
             temp = CreateListElement(drzava);
-
             InsertInTreeFromFile(temp, datotekaGradova);
 
             SortListWhileInserting(head, temp);
@@ -98,11 +97,8 @@ int InsertInTreeFromFile(LPosition drzava,char *fileName){
 
 int SortListWhileInserting(LPosition head, LPosition newElement){
 
-    LPosition temp = NULL;
-    temp = head -> next;
-
-    while( temp != NULL && strcmp(temp -> drzava, newElement -> drzava) > 0 ){ //ne triba next isprid temp!!
-        temp = temp -> next;
+    while( head -> next != NULL && strcmp(head -> next -> drzava, newElement -> drzava) < 0 ){ //ne triba next isprid temp!!
+        head = head -> next;
     }
 
     InsertAfter(newElement, head);
@@ -161,11 +157,11 @@ TPosition SortTreeWhileInserting(TPosition current, TPosition newElement){
     if(!current)
         return newElement;
 
-    if(current -> br_stan < newElement -> br_stan){
+    if(current -> br_stan > newElement -> br_stan){
         current -> right = SortTreeWhileInserting(current -> right, newElement);
     }
 
-    else if(current -> br_stan > newElement -> br_stan){
+    else if(current -> br_stan < newElement -> br_stan){
         current -> left = SortTreeWhileInserting(current -> left, newElement);
     }
     else free(newElement);
