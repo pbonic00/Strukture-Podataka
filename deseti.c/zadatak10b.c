@@ -61,7 +61,7 @@ int InsertInTreeFromFile(TPosition head, char *fileName){
 
     while(!feof(dat)){
 
-            fscanf(dat, "%s %s\n", drzava, datotekaGradova);
+            fscanf(dat, "%s %s", drzava, datotekaGradova);
 //printf("%s", temp -> gradovi);
             temp = CreateTreeElement(drzava);
 //printf("%s %d", temp -> gradovi -> grad, temp -> gradovi -> br_stan);
@@ -108,6 +108,8 @@ int InsertInListFromFile(LPosition head,char *fileName){
 
 int SortListWhileInserting(LPosition head, LPosition newElement){
 
+//printf("\nnovi element: %s %d", newElement -> grad, newElement -> br_stan);
+//printf("\nhead element: %s %d", head -> grad, head -> br_stan);
 
    while( head -> next != NULL && head -> next -> br_stan > newElement -> br_stan) { //ne triba next isprid temp!!
         head = head -> next;
@@ -147,7 +149,7 @@ int PrintList(LPosition first){
     LPosition temp = first -> next;
 
     while(temp){
-        printf("\t\tGrad %s sa %d stanovnika", temp -> grad, temp -> br_stan);
+        printf("\n\t\tGrad %s sa %d stanovnika", temp -> grad, temp -> br_stan);
         temp = temp -> next;
     }
 
@@ -159,7 +161,7 @@ int PrintTreeInOrder(TPosition current){
         return 0;
 
     PrintTreeInOrder(current -> left);
-    printf("Drzava: %s\n", current -> drzava);
+    printf("\nDrzava: %s", current -> drzava);
     PrintList(current -> gradovi);
     PrintTreeInOrder(current -> right);
 
@@ -193,7 +195,13 @@ TPosition CreateTreeElement(char *drzava){
     }
   
     strcpy(newElement -> drzava, drzava);
-    newElement -> gradovi = NULL;
+    newElement -> gradovi = (LPosition) malloc (sizeof(list));
+    if(!newElement -> gradovi){
+        perror("Can't allocate!");
+        free(newElement);
+        return NULL;
+    }
+    newElement -> gradovi -> next =NULL;
     newElement -> right = NULL;
     newElement -> left = NULL;
 
