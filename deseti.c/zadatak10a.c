@@ -29,20 +29,67 @@ int PrintList(LPosition first);
 int PrintTreeInOrder(TPosition current);
 TPosition SortTreeWhileInserting(TPosition current, TPosition newElement);
 TPosition CreateTreeElement(char *grad, int br_stan);
+LPosition FindState (LPosition p, char *ime);
+int FindTown (TPosition p, int broj);
 
 int main(){
 
     list lstDrzava = {.drzava = "", .gradovi = NULL, .next = NULL};
     LPosition listaDrzava = &lstDrzava;
+    char drzava[MAX_LINE] = {0};
+    int br_stan = 0;
+    LPosition p = NULL;
 
     char drzave[] = "drzave.txt";
     InsertInListFromFile(listaDrzava, drzave);
     PrintList(listaDrzava);
 
+    printf("Koju drzavu zelite pretraziti: ");
+    scanf("%s", drzava);
+
+    p = FindState(listaDrzava -> next, drzava);
+
+    if(p == NULL){
+        printf("Drzava ne postoji");
+        return 0;
+    }
+
+    printf("Upisite minimalan broj stanovnika: ");
+    scanf("%d", &br_stan);
+
+    printf("\nGradovi drzave %s sa vise od %d stanovnika: ", p -> drzava, br_stan);
+    FindTown(p -> gradovi, br_stan);
+
     return 1;
 
 }
 
+LPosition FindState (LPosition p, char *ime){
+
+    while( p != NULL){
+        if(strcmp(p -> drzava, ime) == 0)
+            return p;
+        p = p  -> next;
+    }
+    return p;
+}
+
+int FindTown (TPosition p, int broj){
+
+    if(p == NULL)
+        return 0;
+
+    FindTown(p -> left, broj);
+
+    if((p -> br_stan) >= broj){
+       // printf("\nBroj stanovnika %d i broj s kojin usporefdujemo je %d", p -> br_stan, broj);
+        printf("\n%s %d", p -> grad, p -> br_stan);
+    }
+
+    FindTown(p -> right, broj);
+
+    return 0;
+}
 
 int InsertInListFromFile(LPosition head, char *fileName){
 
@@ -185,4 +232,3 @@ TPosition CreateTreeElement(char *grad, int br_stan){
 
     return newElement;
 }
-
